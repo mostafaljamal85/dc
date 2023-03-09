@@ -26,6 +26,8 @@ body{
     text-align: center;
     background-color: black;
     color: aliceblue;
+    height: 30px;
+    border-radius: 10px;
 }
 #btn1{
     margin:0 70px;
@@ -33,6 +35,8 @@ body{
 #img1{
     
     /* margin:5px 0px; */
+    height: 200px;
+    
 }
 .card{
     background-color: rgb(131, 155, 222) !important;
