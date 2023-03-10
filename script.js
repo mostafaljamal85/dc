@@ -17,7 +17,7 @@ fetch('https://restcountries.com/v3.1/all')
       .then(json => {
         json.forEach(element => {
             if(element.name.common==_selected){
-              console.log(element)
+              // console.log(element)
                 var content=`
                 <div class="card" style="width: 18rem;">
                 <img src="image" class="card-img-top" id="img1" alt="image">
@@ -26,17 +26,15 @@ fetch('https://restcountries.com/v3.1/all')
                   <p class="card-title"><span><b>Population : </b></span> pop</p>
                   <p class="card-title"><span><b>Area : </b></span> areas</p>
                   <p class="card-title"><span><b>Continent : </b></span> cont</p>
-                  <div class="card-title"><span><b>Currencies : </b></span>cur</div>
+                  <p class="card-title"><span><b>Currencies : </b></span>cur </p>
                   <p class="card-title"><span><b>Languages : </b></span>lan</p>
                   <p class="card-title"><span><b>Timezone : </b></span>tz</p>
                   <p class="card-title"><span><b>Borders : </b></span>..,..,..,..,..,..,..</p>
-                 
-                  <button href="#" class="btn btn-dark" id="btn1">More details</button>
+                  <button href="#" class="btn btn-dark" id="btn1" onclick="rate()" >Rate of exch </button>
+                  <div id="karim"></div>
                 </div>
               </div>
-              `
-             
-                  
+              `  
                 
               let _div=document.createElement('div');
               let boot =content.replace('image',element.flags.png)
@@ -47,6 +45,17 @@ fetch('https://restcountries.com/v3.1/all')
               var curr=element.currencies
                   Object.values(curr).forEach(currency=>{
                      boot=boot.replace('cur',currency.name+'=> '+currency.symbol)
+                  })
+              var curr2=element.currencies
+                  Object.keys(curr2).forEach(currency2=>{
+
+                    var _curbtn=document.getElementById('curbtn')
+                    var _btn=document.createElement('button')
+                     _btn.innerHTML=currency2
+                    _curbtn.appendChild(_btn)
+                     _btn.addEventListener('click',rate)
+                     boot=boot.replace('exch',currency2)
+
                   })
               var lang=element.languages
                   Object.values(lang).forEach(language=>{
@@ -59,43 +68,32 @@ fetch('https://restcountries.com/v3.1/all')
                })
               }
               boot=boot.replace('tz',element.timezones[0])
-
               _div.innerHTML=boot
               _karim.appendChild(_div)
-
-            
             }
         });
       })
-   
-     
     }
-//     function currenc(){
-//       var _curren=document.getElementById('curren')
-//       var _selected=document.getElementById('select').value;
-//       var _karim=document.getElementById('karim')
-
-//       fetch('https://restcountries.com/v3.1/all')
-//       .then(response => response.json())
-//       .then(json => {
-    
-//              for (let i = 0; i < json.length; i++) {
-//               if(json[i].name.common==_selected){
-//                 var curr=json[i].currencies
-//                 Object.keys(curr).forEach(currency=>{
-//                   var curcontent=
-//                   `                
-//                   <div class="card-title" id="curren"><span><b>Currencies : </b></span>cur</div>
-//                   `
-//                   var _div2=document.createElement('div')
-//                   var boot2=curcontent.replace('cur',currency)
-//                   // var _curr=document.createElement('div')
-//                   // _curr.innerHTML=currency;
-//                   _div2.innerHTML=boot2
-//                   _karim.appendChild(_div2)
-//                 })
-//               }
-                  
-// }
-//       })
-//     }
+    function rate(){
+      var _selected=document.getElementById('select').value;
+      fetch('https://restcountries.com/v3.1/all')
+      .then(response => response.json())
+      .then(json => {
+       for (let i = 0; i < json.length; i++) {
+         if(json[i].name.common==_selected){
+          var currrate=json[i].currencies
+          Object.keys(currrate).forEach(element2=>{
+            console.log(element2)
+            var url='https://api.fastforex.io/fetch-multi?from='+element2+'&to=USD&api_key=ce4406151c-9ae1624803-rr60fz'                    
+                    
+                    fetch(url)
+                    .then(response=>response.json())
+                    .then(r=>{
+                        var _rateExchange=r.results.USD;
+                        alert('the rate of 1 '+element2+' is : '+ _rateExchange + "$")
+                    })
+          })
+         }
+}      })
+    }
+  
